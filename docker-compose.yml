@@ -1,0 +1,22 @@
+# docker-compose.yml
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=local
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest    
+    configs:
+      - source: plugins
+        target: /etc/rabbitmq/enabled_plugins    
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - 'rabbitmq_data:/data'
+configs:
+  plugins:
+    content: "[rabbitmq_management, rabbitmq_prometheus, rabbitmq_shovel, rabbitmq_shovel_management]."      
+
+volumes:
+  rabbitmq_data:
