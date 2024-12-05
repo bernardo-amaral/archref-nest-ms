@@ -11,7 +11,7 @@ import { RabbitMQService } from './rabbitmq.service';
         name: 'RMQ_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://guest:guest@localhost:5672'],
+          urls: ['amqp://guest:guest@localhost:5672/local'],
           queue: 'api-queue',
           queueOptions: {
             durable: false,
