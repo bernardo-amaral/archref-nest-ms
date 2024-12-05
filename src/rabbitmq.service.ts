@@ -8,17 +8,12 @@ export class RabbitMQService {
 
   constructor(
     @Inject('RMQ_SERVICE')
-    private readonly recurringClient: ClientProxy,
+    private readonly client: ClientProxy,
   ) {}
 
-  async sendMessage(eventName: any, payload: object) {
-    try {
-      await lastValueFrom(this.recurringClient.send(eventName, payload));
-      //await lastValueFrom(this.recurringClient.emit(eventName, payload));
-    } catch (error: any) {
-      this.logger.error(
-        `Problem with RMQ in ${eventName} error: ${JSON.stringify(error)}`,
-      );
-    }
+  async send(eventName: any, payload: object) {
+    return lastValueFrom(this.client.send(eventName, payload)).then((error) =>
+      this.logger.error(error),
+    );
   }
 }

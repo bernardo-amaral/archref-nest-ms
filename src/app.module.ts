@@ -11,10 +11,17 @@ import { RabbitMQService } from './rabbitmq.service';
         name: 'RMQ_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          urls: ['amqp://guest:guest@localhost:5672'],
           queue: 'api-queue',
           queueOptions: {
             durable: false,
+            exchange: {
+              name: 'api-queue-exchange',
+              type: 'fanout',
+              echangeOpts: {
+                durable: true,
+              },
+            },
           },
         },
       },
@@ -22,5 +29,6 @@ import { RabbitMQService } from './rabbitmq.service';
   ],
   controllers: [AppController],
   providers: [AppService, RabbitMQService],
+  exports: [RabbitMQService],
 })
 export class AppModule {}

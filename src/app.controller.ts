@@ -10,8 +10,8 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): string {
-    this.rabbitMQService.sendMessage('api-queue', { msg: '🐱' });
-    return this.appService.getHello();
+  async getHello(): Promise<string> {
+    this.rabbitMQService.send('api-queue', { msg: '🐱' });
+    return 'Message sent to the queue!';
   }
 }
