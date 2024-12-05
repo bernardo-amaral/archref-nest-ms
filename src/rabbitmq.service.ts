@@ -11,8 +11,8 @@ export class RabbitMQService {
     private readonly client: ClientProxy,
   ) {}
 
-  async send(eventName: any, payload: object) {
-    return lastValueFrom(this.client.send(eventName, payload)).then((error) =>
+  async send(pattern: string, data: any) {
+    return lastValueFrom(this.client.send(pattern, data)).then((error) =>
       this.logger.error(error),
     );
   }
