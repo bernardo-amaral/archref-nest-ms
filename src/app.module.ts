@@ -14,10 +14,11 @@ import { RabbitMQService } from './rabbitmq.service';
           urls: ['amqp://guest:guest@localhost:5672/local'],
           queue: 'api-queue',
           queueOptions: {
-            durable: false,
+            durable: true,
+            deadLetterExchange: 'api-queue-dlx',
             exchange: {
               name: 'api-queue-exchange',
-              type: 'fanout',
+              type: 'direct',
               echangeOpts: {
                 durable: true,
               },
