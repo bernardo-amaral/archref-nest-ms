@@ -6,7 +6,7 @@ import { queueOptions } from './queue-options';
   imports: [
     ClientsModule.register([queueOptions.requestOrder])
   ],
-  controllers: [RabbitMqController],
+  controllers: [RabbitmqController],
   providers: [],
 })
 export class RabbitMqModule {}
