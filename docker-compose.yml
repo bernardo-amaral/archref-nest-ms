@@ -5,18 +5,41 @@ services:
     environment:
       - RABBITMQ_DEFAULT_VHOST=local
       - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest    
+      - RABBITMQ_DEFAULT_PASS=guest
     configs:
       - source: plugins
-        target: /etc/rabbitmq/enabled_plugins    
+        target: /etc/rabbitmq/enabled_plugins
     ports:
       - 5672:5672
       - 15672:15672
     volumes:
       - 'rabbitmq_data:/data'
+
+  postgres:
+    image: postgres:latest
+    #volumes:
+    #  - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=archref-db
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=postgres@postgres.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+    ports:
+      - '8080:80'
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+
 configs:
   plugins:
-    content: "[rabbitmq_management, rabbitmq_prometheus, rabbitmq_shovel, rabbitmq_shovel_management]."      
+    content: '[rabbitmq_management, rabbitmq_prometheus, rabbitmq_shovel, rabbitmq_shovel_management].'
 
 volumes:
   rabbitmq_data:
