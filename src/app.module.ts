@@ -1,8 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule } from '@nestjs/config';
+import { BudgetPlannerModule } from '@modules/budget-planner/budget-planner.module';
 
 @Module({
-  imports: [RabbitMqModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        '.env',
+        'local.env',
+        'develop.env',
+        'homolog.env',
+        'prod.env',
+      ],
+    }),
+    BudgetPlannerModule,
+  ],
   controllers: [],
   providers: [],
   exports: [],

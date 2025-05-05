@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { queueOptions } from './modules/rabbitmq/queue-options';
-import { ConsoleLogger } from '@nestjs/common';
+import { ConsoleLogger, Logger } from '@nestjs/common';
+
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -12,10 +13,14 @@ async function bootstrap() {
     }),
   });
 
-  app.connectMicroservice(queueOptions.requestOrder);
-
-  app.connectMicroservice(queueOptions.requestOrderDlx);
-
   await app.startAllMicroservices();
+  await app.listen(process.env.PORT ?? 9000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+
+  Logger.verbose(`Application running on port ${process.env.PORT ?? 9000}`);
 }
 bootstrap();
