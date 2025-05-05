@@ -1,22 +1,21 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { NestFactory } from '@nestjs/core';
-// import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { queueOptions } from './modules/rabbitmq/queue-options';
+import { ConsoleLogger } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new ConsoleLogger({
+      prefix: 'ARCHREF-MS',
+      colors: true,
+    }),
+  });
 
-  // app.connectMicroservice<MicroserviceOptions>({
-  //   transport: Transport.RMQ,
-  //   options: {
-  //     urls: ['amqp://localhost:5672'],
-  //     queue: 'cats_queue',
-  //     queueOptions: {
-  //       durable: false,
-  //     },
-  //   },
-  // });
+  app.connectMicroservice(queueOptions.requestOrder);
+
+  app.connectMicroservice(queueOptions.requestOrderDlx);
 
   await app.startAllMicroservices();
-  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
