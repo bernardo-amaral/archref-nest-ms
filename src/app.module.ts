@@ -27,6 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       entities: [__dirname + '/entities/*.entity{.ts,.js}'],
       synchronize: true,
+      logging: true,
     }),
     BudgetPlannerModule,
   ],
