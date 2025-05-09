@@ -13,7 +13,18 @@ export class BudgetPlannerService {
   createBudget(createBudgetDto: Budget): Promise<Budget> {
     const budget: Budget = new Budget();
     budget.description = createBudgetDto.description;
+    budget.initDate = createBudgetDto.initDate;
+    budget.endDate = createBudgetDto.endDate;
 
     return this.budgetRepository.save(budget);
+  }
+
+  getAllBudgets(): Promise<Budget[]> {
+    return this.budgetRepository.find();
+  }
+
+  getBudgetById(id: number): Promise<Budget | null> {
+    const budgetData = this.budgetRepository.findOne({ where: { id } });
+    return budgetData;
   }
 }

@@ -24,13 +24,15 @@ export class BudgetPlannerController {
   }
 
   @Get()
-  findAll(@Res() res: Response) {
-    res.status(HttpStatus.OK).json([]);
+  async findAll(@Res() res: Response) {
+    const budgetsList = await this.budgetPlannerService.getAllBudgets();
+    res.status(HttpStatus.OK).json(budgetsList ?? []);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return `This action returns a #${id} cat`;
+  async findOne(@Param('id') id: number, @Res() res: Response) {
+    const budget = await this.budgetPlannerService.getBudgetById(id);
+    res.status(HttpStatus.OK).json(budget);
   }
 
   @Put(':id')
