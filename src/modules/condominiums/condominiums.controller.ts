@@ -6,7 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { CondominiumsService } from './condominiums.service';
 import { CreateCondominiumDto } from './dto/create-condominium.dto';
 import { UpdateCondominiumDto } from './dto/update-condominium.dto';
@@ -21,8 +24,9 @@ export class CondominiumsController {
   }
 
   @Get()
-  findAll() {
-    return this.condominiumsService.findAll();
+  findAll(@Res() res: Response) {
+    const condominiunsList = this.condominiumsService.findAll();
+    res.status(HttpStatus.OK).json(condominiunsList ?? []);
   }
 
   @Get(':id')
